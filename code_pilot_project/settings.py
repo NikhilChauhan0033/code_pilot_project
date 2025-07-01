@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-sh_605r=sr!9$o2!v(m(f_(pj)6!*gx!)bwxtk^bwve^@-erj3
 # while your collect static and you style is gone make the debug True for applying styling we did the debug false for show the cutsmoe 404 page not found
 DEBUG = True
 
-# while your collect static and you style is gone make the debug True for applying styling we did the debug false for show the cutsmoe 404 page not found
+# if you want to show the custom 404 page not founf so debug will be false and remeber your css is not applying if you did debug false
 
-# DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
