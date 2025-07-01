@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+  <div class="contact-relative-div">
+    <h1>Checkout</h1>
+    <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Checkout</p>
+
+    <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+    <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+    <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+  </div>
+</section>
+
+
+<section class="checkout-section">
+  <div class="checkout-div">
+    <form method="POST">
+      {% csrf_token %}
+
+      <h3>Checkout Details</h3>
+
+      {% if cart_items %}
+      {% for item in cart_items %}
+      <p><span>{{ item.course.course_name }}</span> <span>₹{{ item.course.price }}</span></p>
+      <hr>
+      {% endfor %}
+      <p><strong>Subtotal : </strong> <strong>₹{{ total }}</strong></p>
+      {% elif single_course %}
+      <p><span>{{ single_course.course_name }}</span> <span>₹{{ single_course.price }}</span></p>
+      <hr>
+      <p><strong>Subtotal : </strong> <strong>₹{{ single_course.price }}</strong></p>
+      {% else %}
+      <div class="empty-cart">
+        <p style="display: block;"><i class="fa-solid fa-cart-shopping"></i>Your cart is currently empty.</p>
+      </div>
+      {% endif %}
+
+      {% if cart_items or single_course %}
+
+      <div class="mb-5 mt-4">
+        <!-- <label for="paymentMethod" class="form-label" style="color: #1ab69d; font-size: 20px; font-weight: 600;">Select Payment Method</label> -->
+
+        <div class="dropdown">
+          <button type="button"
+            class="btn custom-dropdown-btn dropdown-toggle w-100 text-start d-flex align-items-center"
+            id="paymentDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+            <span id="dropdownText"> <i class="fa-solid fa-money-check-dollar me-2"></i> Choose a payment method</span>
+          </button>
+
+          <ul class="dropdown-menu w-100" aria-labelledby="paymentDropdownBtn">
+            <li><button type="button" class="dropdown-item payment-option" data-value="upi" data-label="Google Pay"><i
+                  class="fa-brands fa-google-pay me-2"></i> Google Pay</button></li>
+            <li><button type="button" class="dropdown-item payment-option" data-value="paytm" data-label="Paytm"><i
+                  class="fa-brands fa-paypal me-2"></i> Paytm</button></li>
+            <li><button type="button" class="dropdown-item payment-option" data-value="phonepe" data-label="PhonePe"><i
+                  class="fa-solid fa-mobile-screen-button me-2"></i> PhonePe</button></li>
+            <li><button type="button" class="dropdown-item payment-option" data-value="card" data-label="Card"><i
+                  class="fa-regular fa-credit-card me-2"></i> Card</button></li>
+          </ul>
+
+          <input type="hidden" name="payment_method" id="selectedPaymentMethod" required>
+        </div>
+      </div>
+
+      <button type="submit" class="parentbtn checkoutbtn">Make Payment</button>
+      {% endif %}
+
+      <div class="checkout-btns">
+        <a href="{% url 'view_cart' %}"><button type="button" class="parentbtn mr-2"><i
+              class="fa-solid fa-cart-shopping"></i></button></a>
+        <a href="{% url 'index' %}"><button type="button" class="parentbtn mr-2"><i
+              class="fa-solid fa-house"></i></button></a>
+        <a href="{% url 'checkout_history' %}"><button type="button" class="parentbtn mr-2"><i
+              class="fa-solid fa-clock-rotate-left"></i></button></a>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    const paymentInput = document.getElementById('selectedPaymentMethod');
+    const dropdownText = document.getElementById('dropdownText');
+
+    if (paymentOptions.length && paymentInput && dropdownText) {
+      paymentOptions.forEach(item => {
+        item.addEventListener('click', function () {
+          const value = this.getAttribute('data-value');
+          const label = this.getAttribute('data-label');
+          const icon = this.querySelector('i').outerHTML;
+
+          paymentInput.value = value;
+          dropdownText.innerHTML = icon + ' ' + label;
+
+          console.log("✅ Payment method selected:", value);
+        });
+      });
+    }
+  });
+
+</script>
+
+{% endblock %}

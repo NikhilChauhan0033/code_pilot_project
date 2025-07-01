@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout History
+{% endblock %}
+
+{% block body %}
+<section class="contact-sec1">
+  <div class="contact-relative-div">
+    <h1>Checkout History</h1>
+    <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Checkout History</p>
+
+    <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img" /></div>
+    <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img" /></div>
+    <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img" /></div>
+  </div>
+</section>
+
+<section class="checkout-history-section">
+  <div class="checkout-history">
+    {% if checkout_items %}
+  <div class="history-list">
+    {% for order in checkout_items %}
+    <div class="history-item">
+      <p><strong>Course:</strong> {{ order.course.course_name }}</p>
+      <p><strong>Price:</strong> ₹{{ order.price }}</p>
+      <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+      <p><strong>Date:</strong> {{ order.created_at|date:"d M Y h:i A" }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="text-align: center;" class="parentbtn mb-5">No previous checkouts.</p>
+  {% endif %}
+
+  <div style="text-align: center; margin-top: 20px;">
+
+    <a href="{% url 'payment_success' %}" class="atag">
+      <button class="parentbtn mb-2">Payment <i class="fa-solid fa-circle-check ml-1"></i></button>
+    </a>
+        <a href="{% url 'index' %}" class="atag"><button class="parentbtn mb-2"> 
+      <i class="fa-solid fa-house"></i></button></a>
+    <a href="{% url 'payment_failed' %}" class="atag">
+      <button class="parentbtn mb-2">Payment <i class="fa-solid fa-circle-exclamation ml-1"></i></button>
+    </a>
+  </div>
+  </div>
+</section>
+{% endblock %}

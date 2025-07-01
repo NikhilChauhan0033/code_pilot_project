@@ -1,0 +1,12 @@
+<!-- templates/404.html -->
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+
+{% block body %}
+<section style="text-align: center; padding: 50px;">
+  <h1 style="font-size: 60px; color: #1ab69d;">404</h1>
+  <h2>Oops! Page not found</h2>
+  <p>The page you're looking for doesn't exist.</p>
+  <a href="{% url 'index' %}" class="parentbtn btn mt-3">Go Home</a>
+</section>
+{% endblock %}

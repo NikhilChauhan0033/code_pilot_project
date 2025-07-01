@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+    <div class="contact-relative-div">
+        <h1>My Profile</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> My Profile</p>
+
+        <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+        <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+        <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+    </div>
+</section>
+
+<section class="profile-section">
+
+    <div class="profile-icon" style="font-size: 40px; color: #1ab69d;">
+        <i class="fa-solid fa-user-circle"></i>
+    </div>
+
+    <h4 style="margin-bottom: 30px; text-transform: capitalize;">Hello, {{ request.user.username }}</h4>
+
+    <!-- {% if messages %}
+  <div id="messages">
+    {% for message in messages %}
+      <p class="message {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %} -->
+
+    {% if request.user.is_superuser %}
+    <p style="color:red;">Admins are not allowed to update their profile.</p>
+    {% else %}
+    <form method="POST" id="profileForm">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-floating mb-3 form-half">
+                <input type="text" class="form-control" id="username" name="username"
+                    value="{{ request.user.username }}" placeholder="Username" required disabled>
+                <label for="username">Username</label>
+            </div>
+
+            <div class="form-floating mb-3 form-half">
+                <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}"
+                    placeholder="Email" required disabled>
+                <label for="email">Email</label>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-floating mb-3 form-half position-relative">
+                <input type="password" class="form-control" id="old_password" name="old_password"
+                    placeholder="Old Password" disabled>
+                <label for="old_password">Old Password</label>
+                 <i class="fa-solid fa-eye toggle-password" data-target="old_password"></i>
+            </div>
+
+            <div class="form-floating mb-3 form-half position-relative">
+                <input type="password" class="form-control" id="new_password" name="new_password"
+                    placeholder="New Password" disabled>
+                <label for="new_password">New Password</label>
+                 <i class="fa-solid fa-eye toggle-password" data-target="new_password"></i>
+            </div>
+        </div>
+
+        <div class="form-row center-field">
+            <div class="form-floating mb-3 form-half position-relative">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                    placeholder="Confirm Password" disabled>
+                <label for="confirm_password">Confirm New Password</label>
+                 <i class="fa-solid fa-eye toggle-password" data-target="confirm_password"></i>
+
+            </div>
+        </div>
+
+        <button type="button" id="editBtn" class="btn btn-danger">Edit Profile</button>
+        <button type="submit" id="updateBtn" class="parentbtn" style="display:none;">Update Profile</button>
+    </form>
+
+    {% endif %}
+
+    <br>
+
+    <a href="{% url 'logout' %}" class="parentbtn" style="text-decoration: none;">Logout</a>
+
+</section>
+{% endblock %}

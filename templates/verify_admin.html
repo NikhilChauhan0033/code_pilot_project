@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+Verify Admin
+{% endblock %}
+
+{% block body %}
+
+<div class="verify-admin-wrapper">
+  <h2>Enter Admin Verification Key</h2>
+
+  <!-- {% if messages %}
+  <div id="messages">
+    {% for message in messages %}
+    <p class="message {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %} -->
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="password" name="key" placeholder="Enter secret key" required>
+    <button type="submit">Verify</button>
+  </form>
+</div>
+
+{% endblock %}

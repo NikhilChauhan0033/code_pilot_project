@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+Wishlist
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+  <div class="contact-relative-div">
+    <h1>Wishlist</h1>
+    <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Wishlist</p>
+
+    <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+    <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+    <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+  </div>
+</section>
+
+<section class="cart-sec1">
+  {% if favorites %}
+  <table class="fav-table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">Course</th>
+        <th style="width: 20%;">Stack</th>
+        <th style="width: 40%;">Name</th>
+        <th style="width: 20%;">Price</th>
+        <th style="width: 5% ;"></th>
+      </tr>
+    </thead>
+    <tbody id="fav-list">
+      {% for fav in favorites %}
+      <tr class="fav-item" data-id="{{ fav.course.id }}">
+        <td>
+          <video width="100%" height="200" controls style="border-top-left-radius: 3px;border-top-right-radius:3px;">
+            <source src="{{ fav.course.promo_video.url }}" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </td>
+        <td style="text-transform: uppercase;">{{ fav.course.subcategory }}</td>
+        <td>
+          <a href="{% url 'course_detail' fav.course.id %}" class="take-detail">
+            <p>{{ fav.course.course_name }}</p>
+          </a>
+        </td>
+        <td>
+          <p>₹{{ fav.course.price }}</p>
+        </td>
+        <td><button type="button" class="remove-favorite" data-id="{{ fav.course.id }}"><i
+              class="fa-solid fa-xmark"></i></button></td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+  <div class="mobile-cart">
+    <div id="fav-list">
+      {% for fav in favorites %}
+      <div class="fav-item mobile-cart-item" data-id="{{ fav.course.id }}">
+        <p><span class="s1">Course Name</span> <span class="s2">{{ fav.course.course_name }}</span></p>
+        <p><span class="s1">Stack</span> <span class="s2"
+            style="text-transform: uppercase;">{{fav.course.subcategory}}</span></p>
+        <p><span class="s1">Price</span> <span class="s2">₹{{ fav.course.price }}</span></p>
+        <button type="button" class="remove-favorite" data-id="{{ fav.course.id }}"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-cart">
+    <p><i class="fa-solid fa-heart-circle-exclamation"></i>Your Wishlist is currently empty.</p>
+    <a href="{% url 'courses' %}">
+      <button>Return to Courses</button>
+    </a>
+  </div>
+  {% endif %}
+
+</section>
+
+
+<!-- Toast -->
+<!-- <div id="fav-toast"
+  style="display:none; position:fixed; top:20px; right:20px; background:#81c408; color:white; padding:10px; border-radius:5px;">
+</div>
+
+<ul id="fav-list">
+  {% for fav in favorites %}
+  <li class="fav-item" data-id="{{ fav.course.id }}">
+    <strong>{{ fav.course.course_name }}</strong> - ₹{{ fav.course.price }}
+    <button class="remove-favorite" data-id="{{ fav.course.id }}">Remove</button>
+  </li>
+  {% empty %}
+  <p>You have no favorite courses.</p>
+  {% endfor %}
+</ul> -->
+
+{% endblock %}

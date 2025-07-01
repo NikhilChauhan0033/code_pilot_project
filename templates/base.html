@@ -1,0 +1,658 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>CodePilot - {% block title %}{% endblock %}</title>
+
+    <!-- for modal -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- for offcanvas -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'image/favicon_io/favicon-32x32.png' %}">
+
+    <!-- Use a JavaScript Library (more powerful) -->
+    <!-- you want smoother, customizable effects like fade, zoom, flip, etc., use AOS (Animate On Scroll). -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+
+    <style>
+        .active-btn {
+            background-color: black;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- error and success and info mesaages -->
+    {% if messages %}
+    <div id="messages" class="message-container">
+        {% for message in messages %}
+        <div class="custom-message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <div class="message-container" id="ajax-message-container"></div>
+
+
+    <div class="headerDiv">
+        <div class="headertextDiv">
+            <p class="headertext">
+                <i class="fa-solid fa-phone hicon"></i>
+                Call: +91 123 456 7890
+            </p>
+
+            <span></span>
+
+            <p class="headertext">
+                <i class="fa-solid fa-envelope hicon"></i>
+                Email: info@codepilot.com
+            </p>
+        </div>
+
+        <div class="hoverParent">
+            {% if request.user.is_authenticated %}
+            {% if not request.user.is_superuser %}
+            <!-- Regular User -->
+            <p class="nameIcon">{{ request.user.username|slice:":1"|upper }}</p>
+            <div class="hoverDiv">
+                <a href="{% url 'profile' %}" class="atag">
+                    <button class="parentbtn">My Profile</button>
+                </a>
+                <a href="{% url 'logout' %}" class="atag">
+                    <button class="parentbtn">Logout</button>
+                </a>
+            </div>
+
+            {% elif request.session.admin_verified %}
+            <!-- Verified Admin -->
+            <p class="nameIcon">{{ request.user.username|slice:":1"|upper }}</p>
+            <div class="hoverDiv">
+                <a href="/admin/" class="atag">
+                    <button class="parentbtn">Admin Panel</button>
+                </a>
+                <a href="{% url 'logout' %}" class="atag">
+                    <button class="parentbtn">Logout</button>
+                </a>
+            </div>
+
+            {% endif %}
+
+            {% else %}
+            <!-- Not logged in -->
+            <button type="button" class="btn btn-primary hbtn" data-toggle="modal" data-target="#exampleModalCenter">
+                Login / Register
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <header>
+        <div class="header">
+            <a href="{% url 'index' %}" class="logolink">
+                <img src="{% static 'image/logo.png' %}" alt="CodePilot Logo" class="logo"><b>C</b>ode<b>P</b>ilot
+            </a>
+
+            <ul class="headerul">
+                <a href="{% url 'index' %}">
+                    <li>Home</li>
+                </a>
+                <div class="hover-course-opntainer">
+                    <a href="{% url 'courses' %}">
+                        <li>Courses <i class="fa-solid fa-chevron-down" style="margin-left: 10px; font-size: 12px;"></i>
+                        </li>
+                    </a>
+
+                    <div class="hover-course-div">
+                        <div class="parent-courses-category">
+                            <div class="course-names1">
+                                <h4>Courses</h4>
+                                <a href="{% url 'courses' %}?category=full_stack">
+                                    <p>Full Stack Development</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=mobile_app">
+                                    <p>Mobile App Development</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=data_science">
+                                    <p>Data Science</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=data_analytics">
+                                    <p>Data Analytics</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=software_testing">
+                                    <p>Software Testing</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=digital_marketing">
+                                    <p>Digital Marketing</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=ux_ui">
+                                    <p>UX/UI Design</p>
+                                </a>
+                                <a href="{% url 'courses' %}?category=cyber_security">
+                                    <p>Cyber Security</p>
+                                </a>
+                            </div>
+
+                            <div class="course-names2">
+                                <h4>Courses Name</h4> <br>
+                                {% for allcourse in allcourses %}
+                                <a href="{% url 'course_detail' allcourse.id %}" style="color: white;">
+                                    <p>{{ allcourse.subcategory }}</p>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'instructors' %}">
+                    <li>Instructors</li>
+                </a>
+                <a href="{% url 'about_us' %}">
+                    <li>About Us</li>
+                </a>
+                <a href="{% url 'contact_us' %}">
+                    <li>Contact Us</li>
+                </a>
+            </ul>
+
+            <span class="emptyspan"></span>
+
+            <div class="headerbtns">
+                <button class="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop"
+                    aria-controls="offcanvasTop"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <div class="mycart-container">
+
+                    <a href="{% url 'view_cart' %}"> <button><i class="fa-solid fa-cart-shopping"></i><span
+                                id="cart-count" class="countspan">{{request.user.cart_set.count}}</span></button></a>
+                    <div class="hoverDivCart" id="cart-snippet-wrapper">
+
+                        {% include 'partials/cart_snippet.html' %}
+                    </div>
+                </div>
+
+                <a href="{% url 'view_favorites' %}"> <button><i class="fa-regular fa-heart"></i><span
+                            id="wishlist-count"
+                            class="countspan">{{request.user.favorite_set.count}}</span></button></a>
+
+                <button class="canvasbtn" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i
+                        class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- given below canvas is for search -->
+    <div class="offcanvas offcanvas-top canvasmy" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+        <div class="offcanvas-header canheader">
+            <a href="{% url 'index' %}" class="logolink">
+                <img src="{% static 'image/logo.png' %}" alt="CodePilot Logo" class="logo"><b>C</b>ode<b>P</b>ilot
+            </a>
+            <!-- <h5 class="offcanvas-title" id="offcanvasTopLabel">Offcanvas top</h5> -->
+            <button type="button" class="closebtn" data-bs-dismiss="offcanvas" aria-label="Close"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="offcanvas-body canvasbody">
+            <form id="search-form" method="GET" action="">
+                <div class="searchDiv">
+                    <input type="text" name="q" id="search" placeholder="Search Here..." class="searchinp"
+                        autocomplete="off" required>
+                    <button type="submit" class="searchbtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <!-- Suggestions dropdown -->
+                <div id="suggestions-box" class="suggestions">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- given below canvas is for backdrop with scrolling for tablet and mobile version-->
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
+        aria-labelledby="offcanvasWithBothOptionsLabel">
+        <!-- <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div> -->
+
+        <div class="offcanvas-header canheader">
+            <a href="{% url 'index' %}" class="logolink">
+                <img src="{% static 'image/logo.png' %}" alt="CodePilot Logo" class="logo"><b>C</b>ode<b>P</b>ilot
+            </a>
+            <!-- <h5 class="offcanvas-title" id="offcanvasTopLabel">Offcanvas top</h5> -->
+
+            <button type="button" class="closebtn" data-bs-dismiss="offcanvas" aria-label="Close"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <hr style="width: 100%; margin: 0px;">
+
+        <div class="offcanvas-body">
+
+            <ul class="offcanvasul">
+                <a href="{% url 'index' %}">
+                    <li>Home</li>
+                </a>
+                <li style="list-style: none;">
+                    <a href="javascript:void(0);" onclick="toggleSubcategory(this)">
+                        <div class="toggle-icons">
+                            Courses
+                            <i class="fa-solid fa-plus" style="float: right; margin-top: 5px;"></i>
+                            <i class="fa-solid fa-minus" style="float: right; margin-top: 5px;"></i>
+                        </div>
+                    </a>
+                    <div class="subcategory-content">
+                        <!-- This content will toggle -->
+
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                        aria-controls="flush-collapseOne">
+                                        Courses
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <a href="{% url 'courses' %}?category=full_stack">
+                                            <p>Full Stack Development</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=mobile_app">
+                                            <p>Mobile App Development</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=data_science">
+                                            <p>Data Science</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=data_analytics">
+                                            <p>Data Analytics</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=software_testing">
+                                            <p>Software Testing</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=digital_marketing">
+                                            <p>Digital Marketing</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=ux_ui">
+                                            <p>UX/UI Design</p>
+                                        </a>
+                                        <a href="{% url 'courses' %}?category=cyber_security">
+                                            <p>Cyber Security</p>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                        aria-controls="flush-collapseTwo">
+                                        Courses Name
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        {% for allcourse in allcourses %}
+                                        <a href="{% url 'course_detail' allcourse.id %}">
+                                            <p> {{ allcourse.subcategory }}</p>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+                <a href="{% url 'instructors' %}">
+                    <li>Instructors</li>
+                </a>
+                <a href="{% url 'about_us' %}">
+                    <li>About Us</li>
+                </a>
+                <a href="{% url 'contact_us' %}">
+                    <li>Contact Us</li>
+                </a>
+                {% if request.user.is_authenticated %}
+                {% if not request.user.is_superuser %}
+                <a href="{% url 'profile' %}">
+                    <li>Profile</li>
+                </a>
+                {% else %}
+                <a href="/admin/" class="atag">
+                    <button class="parentbtn">Admin Panel</button>
+                </a>
+                {% endif %}
+                <a href="{% url 'logout' %}"><button class="parentbtn">Logout</button></a>
+
+                {% else %}
+                <a href="#" data-toggle="modal" data-target="#exampleModalCenter" data-bs-dismiss="offcanvas"><button
+                        class="parentbtn">Login / Register</button></a>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    {% block body %}
+
+    {% endblock %}
+
+    <!-- Modal for signUp and signIn-->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="padding-right: 0px !important;">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="padding-bottom:20px;">
+                <div class="modal-header" style="border-bottom: 0px !important;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    {% if messages %}
+                    <div id="messages" class="message-container"
+                        style="position: unset !important; width: 100% !important;">
+                        {% for message in messages %}
+                        <div class="custom-message {{ message.tags }}" style="position: unset !important;">{{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Login/Register Buttons -->
+                    <div class="btnsDiv">
+                        <button id="loginBtn" onclick="showLogin()" class="btn">Sign in</button>
+                        <button id="registerBtn" onclick="showRegister()" class="btn">Sign up</button>
+                    </div>
+                    <!-- Login Form -->
+                    <div class="loginDiv">
+                        <h2>Sign in</h2>
+                        <p>Don't have an account? <a href="#" onclick="showRegister()" class="aLink">Sign up</a></p>
+
+                        <form method="POST" action="{% url 'login' %}" class="lrform">
+                            {% csrf_token %}
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="login_identifier" name="identifier"
+                                    placeholder="Email or Username" required>
+                                <label for="login_identifier">Email or Username</label>
+                            </div>
+
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" class="form-control" id="login_password" name="password"
+                                    placeholder="Password" required>
+                                <label for="login_password">Password</label>
+                                <i class="fa-solid fa-eye toggle-password" data-target="login_password"
+                                    style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"></i>
+                            </div>
+
+                            <button type="submit" class="sbtn">Sign in</button>
+                        </form>
+                    </div>
+
+
+                    <div class="registerDiv">
+                        <h2>Sign up</h2>
+                        <p>Already have an account? <a href="#" onclick="showLogin()" class="aLink">Sign in</a></p>
+
+                        <form method="POST" action="{% url 'register' %}" class="lrform">
+                            {% csrf_token %}
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="reg_username" name="username"
+                                    placeholder="Username" required>
+                                <label for="reg_username">Username</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="reg_email" name="email" placeholder="Email"
+                                    required>
+                                <label for="reg_email">Email</label>
+                            </div>
+
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" class="form-control" id="reg_password" name="password"
+                                    placeholder="Password" required>
+                                <label for="reg_password">Password</label>
+                                <i class="fa-solid fa-eye toggle-password" data-target="reg_password"
+                                    style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"></i>
+                            </div>
+
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" class="form-control" id="reg_confirm_password"
+                                    name="confirm_password" placeholder="Confirm Password" required>
+                                <label for="reg_confirm_password">Confirm Password</label>
+                                <i class="fa-solid fa-eye toggle-password" data-target="reg_confirm_password"
+                                    style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"></i>
+                            </div>
+
+                            <button type="submit" class="sbtn">Register</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="mainfooter">
+            <div class="footerDiv1">
+                <a href="{% url 'index' %}" class="logolink">
+                    <img src="{% static 'image/logo.png' %}" alt="CodePilot Logo" class="logo"><b>C</b>ode<b>P</b>ilot
+                </a>
+
+                <h4></h4>
+
+                <h6 style="color: black !important;">CodePilot - Learn to Code the Smart Way</h6>
+
+                <p><strong>Address</strong> : 123 Code Street, Coding City, CS 12345</p>
+                <p class="hover"><strong>Call</strong> : +91 123 456 7890</p>
+                <p class="hover"><strong>Email</strong> : info@codepilot.com</p>
+
+            </div>
+            <div class="footerDiv2">
+
+                <h4>Online Platform</h4>
+
+                <ul>
+                    <a href="{% url 'about_us' %}">
+                        <li>About Us</li>
+                    </a>
+                    <a href="{% url 'courses' %}">
+                        <li>Courses</li>
+                    </a>
+                    <a href="#">
+                        <li>Events</li>
+                    </a>
+                    <a href="#">
+                        <li>Instructor Details</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="footerDiv3">
+                <h4>Links</h4>
+                <ul>
+                    <a href="{% url 'contact_us' %}">
+                        <li>Contact Us</li>
+                    </a>
+                    <a href="#">
+                        <li>Gallery</li>
+                    </a>
+                    <a href="#">
+                        <li>News & Articles</li>
+                    </a>
+                    <a href="#">
+                        <li>FAQ’s</li>
+                    </a>
+                </ul>
+
+            </div>
+            <div class="footerDiv4">
+                <h4>Contacts</h4>
+
+                <p>Enter your email address to register to our newsletter subscription</p>
+
+                <form action="{% url 'subscribe_email' %}" method="post" class="footerForm">
+                    {% csrf_token %}
+                    <input type="email" name="email" placeholder="Your email" class="footerInp" required>
+                    <button type="submit" class="footerBtn">Subscribe</button>
+                </form>
+
+
+                <ul class="socialMediaLinks">
+                    <li><a href="#" style="color: #1877F2;"><i class="fa-brands fa-facebook-f"></i></a></li>
+                    <li><a href="#" style="color: #0077B5;"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                    <li><a href="#" style="color: purple;"><i class="fa-brands fa-instagram"></i></a></li>
+                    <li><a href="#" style="color: #1DA1F2;"><i class="fa-brands fa-twitter"></i></a></li>
+                    <li><a href="#" style="color: red;"><i class="fa-brands fa-youtube"></i></a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footerlast">
+            <p> Copyright 2025 <b>CodePilot</b> | Developed By <b>Nikhil Chauhan</b>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <!-- for modal -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <!-- for offcanvas -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% if request.session.open_modal == 'login' %}
+    <script>
+        $(document).ready(function () {
+            $('#exampleModalCenter').modal('show');
+            showLogin();
+        });
+    </script>
+    {% endif %}
+
+    {% if request.session.open_modal == 'register' %}
+    <script>
+        $(document).ready(function () {
+            $('#exampleModalCenter').modal('show');
+            showRegister();
+        });
+
+    </script>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Live suggestions
+            $('#search').on('keyup', function () {
+                const query = $(this).val();
+
+                if (query.length > 1) {
+                    $.ajax({
+                        url: '/search_suggestions/',
+                        data: { q: query },
+                        success: function (data) {
+                            let html = '';
+                            if (data.length > 0) {
+                                data.forEach(course => {
+                                    html += `<div class="suggestion-item" data-id="${course.id}" style="padding: 5px; cursor: pointer;">${course.name}</div>`;
+                                });
+                            } else {
+                                html = '<div style="padding: 5px;">No results</div>';
+                            }
+                            $('#suggestions-box').html(html).show();
+                        }
+                    });
+                } else {
+                    $('#suggestions-box').hide();
+                }
+            });
+
+            // On suggestion click → redirect
+            $(document).on('click', '.suggestion-item', function () {
+                const courseId = $(this).data('id');
+                if (courseId) {
+                    window.location.href = `/course/${courseId}/`;  // adjust this if your course_detail URL is different
+                }
+            });
+
+            // Submit form (on button click or Enter key)
+            $('#search-form').on('submit', function (e) {
+                e.preventDefault();
+                const query = $('#search').val().trim();
+                if (query.length > 0) {
+                    window.location.href = `/search_course/?q=${encodeURIComponent(query)}`;
+                } else {
+                    window.location.href = '/';
+                }
+            });
+
+            // Hide suggestion on outside click
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#search').length) {
+                    $('#suggestions-box').hide();
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const input = document.getElementById(this.getAttribute('data-target'));
+                if (input.type === "password") {
+                    input.type = "text";
+                    this.classList.remove("fa-eye");
+                    this.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    this.classList.remove("fa-eye-slash");
+                    this.classList.add("fa-eye");
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
+
+<!-- 
+<p>{{ course.category }}</p> shows: full_stack
+<p>{{ course.get_category_display }}</p> shows: Full Stack Development
+-->

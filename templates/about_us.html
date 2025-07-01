@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}
+About us
+{% endblock %}
+
+{% block body %}
+
+<section class="about-sec1">
+    <div class="main-about-div">
+        <h1> A Large Range of Course Learning Paths</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> About Us</p>
+    </div>
+</section>
+
+<section class="about-sec2" data-aos="fade-up" data-aos-duration="1000">
+
+    <div class="about-flex">
+        <div class="text-box">
+            <p>about us</p>
+            <h1>We Providing The <span class="pink-text-color">Best Quality</span> Online Courses.</h1>
+            <img src="../static/image/span-img.png" alt="" class="design-span">
+            <p style="text-transform: none;font-size: 16px;">At CodePilot, we are passionate about empowering learners
+                with real-world skills in technology, design, and development. Our mission is to deliver high-quality,
+                industry-relevant courses and guidance from expert instructors — helping you grow, build, and succeed in
+                your career.</p>
+            <p class="about-p"><i class="fa-solid fa-check"></i>Flexible Classes</p>
+            <p class="about-p"><i class="fa-solid fa-check"></i>Offline Classe Mode</p>
+            <p class="about-p"><i class="fa-solid fa-check"></i>Educator Support</p>
+        </div>
+        <div class="about-imgs">
+            <div class="about-img1"><img src="../static/image/about-img1.webp" alt="imgs"></div>
+            <div class="about-img2"><img src="../static/image/about-img2.webp" alt="imgs"></div>
+
+            <div class="about-abs1 follow-cursor"><img src="../static/image/hbg1.png" alt="imgs"></div>
+            <div class="about-abs2 follow-cursor"><img src="../static/image/hbg4.png" alt="imgs"></div>
+            <div class="about-abs3"><img src="../static/image/hbg3.png" alt="imgs"></div>
+        </div>
+
+    </div>
+
+    <div class="about-grid-imgs" data-aos="fade-up" data-aos-duration="1000">
+        <div><img src="../static/image/brand-01.png" alt="imgs"></div>
+        <div><img src="../static/image/brand-02.png" alt="imgs"></div>
+        <div><img src="../static/image/brand-03.png" alt="imgs"></div>
+        <div><img src="../static/image/brand-04.png" alt="imgs"></div>
+        <div><img src="../static/image/brand-05.png" alt="imgs"></div>
+        <div><img src="../static/image/brand-06.png" alt="imgs"></div>
+    </div>
+
+</section>
+
+<section class="about-sec3" data-aos="fade-up" data-aos-duration="1000">
+    <div class="about-main-div">
+        <div class="text-box">
+            <p>WHY CHOOSE EDUBLINK</p>
+            <h1>The Best <span class="pink-text-color">Beneficial</span> Side of CodePilot</h1>
+            <img src="../static/image/span-imgs.png" alt="" class="design-span">
+        </div>
+        <div class="about-container1"></div>
+        <div class="about-container2"></div>
+        <div class="about-cards-abs">
+            <div class="aboutcard card1">
+                <div><i class="fa-solid fa-graduation-cap"></i></div>
+                <h4>High Quality Courses</h4>
+                <p>Learn from professionally designed, up-to-date courses.
+                    Each lesson is crafted to match real industry needs.</p>
+            </div>
+            <div class="aboutcard card2">
+                <div><i class="fa-solid fa-person-chalkboard"></i></div>
+                <h4>Life Time Access</h4>
+                <p>Enroll once and access your course content anytime.
+                    Learn at your own pace without any time limits.</p>
+            </div>
+            <div class="aboutcard card3">
+                <div><i class="fa-solid fa-chalkboard-user"></i></div>
+                <h4>Expert Instructors</h4>
+                <p>Get trained by industry professionals and educators.
+                    Our instructors bring hands-on experience to every class.</p>
+            </div>
+        </div>
+            <div class="abtabs abtabs1 follow-cursor"> <img src="../static/image/hbg1.png" alt="img"></div>
+            <div class="abtabs abtabs2 follow-cursor"> <img src="../static/image/hbg4.png" alt="img"></div>
+    </div>
+</section>
+
+ <section class="home-sec5">
+    <div class="main-div4">
+
+    </div>
+    <div class="main-div5">
+
+    </div>
+    <div class="main-counter-div">
+        <div class="counter-div1">
+            <h1 class="counter" data-target="45.2">0</h1>
+            <p>Students Enrolled</p>
+        </div>
+
+        <div class="counter-div2">
+            <h1 class="counter" data-target="32.4">0</h1>
+            <p>Classes Completed</p>
+        </div>
+
+        <div class="counter-div3">
+            <h1 class="counter" data-target="354" data-suffix="+">0</h1>
+            <p>Top Instructors</p>
+        </div>
+
+        <div class="counter-div4">
+            <h1 class="counter" data-target="99.9" data-suffix="%">0</h1>
+            <p>Satisfaction Rate</p>
+        </div>
+    </div>
+    <!-- for left right top bottom movements  class name follow-cursor -->
+    <div class="counter-abs1 follow-cursor">
+        <img src="../static/image/hbg1.png" alt="">
+    </div>
+
+    <div class="counter-abs2">
+        <img src="../static/image/hbg3.png" alt="">
+    </div>
+
+    <div class="counter-abs3 follow-cursor">
+        <img src="../static/image/hbg6.png" alt="">
+    </div>
+
+    <div class="counter-abs4 follow-cursor">
+        <img src="../static/image/hbg4.png" alt="">
+    </div>
+
+</section> 
+
+<section class="home-sec7" data-aos="fade-up" data-aos-duration="1000">
+    <div class="text-box">
+        <p>instructors</p>
+        <h1>Course Instructors</h1>
+        <img src="../static/image/span-img.png" alt="" class="design-span">
+    </div>
+
+    <div class="insturctor-main-div">
+        {% for instructor in instructors %}
+
+        <div class="instructor-child-div">
+            <div class="inner-relative-div">
+                <img src="{{ instructor.profile_image.url }}" alt="no image available">
+
+                <div class="instructor-abs1">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </div>
+                <div class="instructor-abs2">
+                    <div class="inner-child">
+                        <div><i class="fa-solid fa-share-nodes"></i></div>
+                        <div><i class="fa-brands fa-facebook-f"></i></div>
+                        <div><i class="fa-brands fa-twitter"></i></div>
+                        <div><i class="fa-brands fa-linkedin-in"></i></i></div>
+                    </div>
+                </div>
+
+            </div>
+            <h5>{{ instructor.name }}</h5>
+            <p>{{ instructor.profession }}</p>
+            <a href="{% url 'instructor_detail' instructor.id %}">
+                <button>View Profile</button>
+            </a>
+        </div>
+        {% empty %}
+        <p>No instructors available.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

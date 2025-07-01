@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Instructor Profile - {{ instructor.name }}
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+    <div class="contact-relative-div">
+        <h1>Instructors Details</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Instructors Details</p>
+
+        <div class="contact-absu1 follow-cursor"><img src="{% static 'image/hbg1.png' %}" alt="img"></div>
+        <div class="contact-absu2 follow-cursor"><img src="{% static 'image/hbg4.png' %}" alt="img"></div>
+        <div class="contact-absu3 follow-cursor"><img src="{% static 'image/hbg5.png' %}" alt="img"></div>
+    </div>
+</section>
+
+
+<section class="instructor-section" data-aos="fade-up" data-aos-duration="1000">
+<div class="instructor-flex-div">
+    <div class="instructor-div1">
+        <img src="{{instructor.profile_image.url}}" alt="">
+
+        <div class="contact-icons-div">
+                <div><i class="fa-solid fa-share-nodes"></i></div>
+                <div><i class="fa-brands fa-facebook-f"></i></div>
+                <div><i class="fa-brands fa-twitter"></i></div>
+                <div><i class="fa-brands fa-linkedin-in"></i></i></div>
+            </div>
+    </div>
+    <div class="instructor-div2">
+        <p style="color: #1ab69d; font-size: 16px !important;">INSTRUCTOR</p>
+
+        <h2>{{instructor.name}}</h2>
+        <p><span>{{instructor.profession}} And Teacher</span></p>
+        <p>  <i class="fa-solid fa-star gold"></i> {{instructor.rating}}</p>
+
+        <h4>About Me</h4>
+        <p><span>{{instructor.about}}</span></p>
+
+        <h4>Contact Me</h4>
+        <p>Email : <span>{{instructor.email}}</span> </p>
+        <p>Phone : <span>{{instructor.phone_no}} </span></p>
+    </div>
+</div>
+</section>
+
+
+<section class="home-sec4" data-aos="fade-up" data-aos-duration="1000">
+    <div class="text-box">
+        <p>popular courses</p>
+        <h1>Pick A Course To Get Started</h1>
+        <img src="{% static 'image/span-imgs.png' %}" alt="" class="design-span">
+    </div>
+
+    <div class="courses-container">
+        {% for course in allcourses %}
+        <div class="courses-maindiv">
+            <a href="{% url 'course_detail' course.id %}" style="text-decoration: none; color: black;">
+
+                <video width="100%" height="200" controls
+                    style="border-top-left-radius: 3px;border-top-right-radius:3px;">
+                    <source src="{{ course.promo_video.url }}" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="courses-child">
+                    <div class="child-absdiv">
+                        <p><i class="fa-regular fa-clock"></i> {{ course.duration }}</p>
+                    </div>
+
+                    <p class="courses-level">{{ course.level }}</p>
+                    <p class="courses-name">{{ course.course_name }} <br> <span>{{ course.subcategory }}</span></p>
+                    <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+                    <p class="courses-price">₹{{ course.price }}</p>
+                    <div class="child-flex">
+                        <p class="courses-student"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+                            Students
+                        </p>
+                        <p class="courses-badge">{{ course.badge }}</p>
+                    </div>
+                </div>
+                <div class="courses-absdiv">
+                    <button class="add-fav" {% if not request.user.is_authenticated %} data-toggle="modal"
+                        data-target="#exampleModalCenter" data-bs-dismiss="offcanvas" onclick="showLoginMessage()"
+                        {% else %} data-id="{{ course.id }}" {% endif %}>
+                        {% if course in favorite_courses %}
+                        <i class="fa-solid fa-heart text-danger"></i>
+                        {% else %}
+                        <i class="fa-regular fa-heart"></i>
+                        {% endif %}
+                    </button>
+
+                    <p class="abs-level" style="color: black !important;">{{ course.level }}</p>
+                    <h6>{{ course.course_name }} <br> <span
+                            style="text-transform: uppercase;">{{course.subcategory}}</span>
+                    </h6>
+                    <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+                    <p>₹{{ course.price }}</p>
+                    <p class="courses-desc">{{ course.short_description }}</p>
+                    <div class="child-flex">
+                        <p class="courses-student cs"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+                            Students
+                        </p>
+                        <p class="courses-badge">{{ course.badge }}</p>
+                    </div>
+                    <a href="{% url 'course_detail' course.id %}">
+                        <button class="enroll-btn">Enroll Now <i class="fa-solid fa-arrow-right-long ml-1"
+                                id="faArrow"></i></button>
+                    </a>
+                    <!-- messgae  of fav
+            <div id="fav-toast"> 
+                Added to favorites!
+            </div> -->
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>No courses available.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'courses' %}" class="atag"><button class="parentbtn allbtn">Browse more courses <i
+                class="fa-solid fa-arrow-right-long ml-1" id="faArrow"></i></button></a>
+</section>
+
+{% endblock %}

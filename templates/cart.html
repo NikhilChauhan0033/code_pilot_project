@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cart
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+    <div class="contact-relative-div">
+        <h1>Cart</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Cart</p>
+
+        <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+        <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+        <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+    </div>
+</section>
+
+<section class="cart-sec1">
+
+    <div id="undo-message" style="display: none; margin-bottom: 10px;">
+        <span id="undo-text"></span>
+        <button id="undo-btn"
+            style="margin-left: 10px; background-color: transparent; border:none; text-decoration: underline;color: white;">Undo?</button>
+    </div>
+
+    {% if cart_items|length > 0 %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th style="width: 15%;">Course</th>
+                <th style="width: 20%;">Stack</th>
+                <th style="width: 40%;">Name</th>
+                <th style="width: 20%;">Price</th>
+                <th style="width: 5% ;"></th>
+            </tr>
+        </thead>
+        <tbody id="cart-items-list">
+            {% for item in cart_items %}
+            <tr class="cart-item" data-id="{{ item.id }}" data-course-id="{{ item.course.id }}"
+                data-price="{{ item.course.price }}">
+                <td>
+                    <video width="100%" height="200" controls
+                        style="border-top-left-radius: 3px;border-top-right-radius:3px;">
+                        <source src="{{ item.promo_video.url }}" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </td>
+                <td style="text-transform: uppercase;">{{ item.course.subcategory }}</td>
+                <td>
+                    <a href="{% url 'course_detail' item.course.id %}" class="take-detail">
+                        <p>{{ item.course.course_name }}</p>
+                    </a>
+                </td>
+                <td>
+                    <p>₹{{ item.course.price }}</p>
+                </td>
+                <td><button type="button" class="remove-cart" data-id="{{ item.id }}"><i
+                            class="fa-solid fa-xmark"></i></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="mobile-cart">
+        <div id="cart-items-list">
+            {% for item in cart_items %}
+            <div class="cart-item mobile-cart-item" data-id="{{ item.id }}" data-price="{{ item.course.price }}">
+                <p><span class="s1">Course Name</span> <span class="s2">{{ item.course.course_name }}</span></p>
+                <p><span class="s1">Stack</span> <span class="s2"
+                        style="text-transform: uppercase;">{{item.course.subcategory }}</span></p>
+                <p><span class="s1">Price</span> <span class="s2">₹{{ item.course.price }}</span></p>
+                <button type="button" class="remove-cart" data-id="{{ item.id }}"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+    <div class="cart-totals">
+        <h1>Cart Totals</h1>
+        <p>Subtotal <span>₹<span id="cart-total">{{ total }}</span></span></p>
+        <hr>
+        <p>Total <span>₹<span id="cart-total1">{{ total }}</span></span></p>
+
+        <a href="{% url 'checkout' %}">
+            <button id="checkout-btn" class="parentbtn">Proceed to checkout</button>
+        </a>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <p><i class="fa-solid fa-cart-shopping"></i>Your cart is currently empty.</p>
+        <a href="{% url 'courses' %}">
+            <button>Return to Courses</button>
+        </a>
+    </div>
+    {% endif %}
+
+</section>
+
+<!-- <script>
+    window.addEventListener("load", function () {
+        window.scrollTo(0, 0);
+    });
+</script> -->
+
+{% endblock %}

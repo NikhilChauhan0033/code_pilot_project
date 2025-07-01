@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+Contact us
+{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+    <div class="contact-relative-div">
+        <h1>Contact Us</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Contact Us</p>
+
+        <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+        <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+        <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+    </div>
+</section>
+
+<section class="contact-sec2">
+
+    <div class="contact-container-div">
+        <div class="contact-text-div">
+            <h2>We're Always Eager to Hear From You!</h2>
+
+            <h5>Address</h5>
+            <p class="lightblackcolor">Studio 76d, Riley Ford, North Michael chester, CF99 6QQ</p>
+
+            <h5>Email</h5>
+            <p><span>info@codepilot.com</span></p>
+
+            <h5>Phone</h5>
+            <p><span>(+91) 123 456 7890</span></p>
+
+            <div class="contact-icons-div">
+                <div><i class="fa-solid fa-share-nodes"></i></div>
+                <div><i class="fa-brands fa-facebook-f"></i></div>
+                <div><i class="fa-brands fa-twitter"></i></div>
+                <div><i class="fa-brands fa-linkedin-in"></i></i></div>
+            </div>
+        </div>
+
+        <form method="POST" class="contact-form">
+            {% csrf_token %}
+
+            <h4>Get In Touch</h4>
+            <p class="lightblackcolor">Fill out this form for booking a consultant advising session.</p>
+
+            <input type="text" name="name" placeholder="Your name *" required>
+            <input type="email" name="email" placeholder="Enter your email *" required>
+            <input type="text" name="subject" placeholder="Subject">
+            <textarea name="message" placeholder="Your Message" required></textarea>
+
+            <button type="submit" class="parentbtn">
+                Submit Message <i class="fa-solid fa-arrow-right-long ml-1"></i>
+            </button>
+        </form>
+    </div>
+
+</section>
+
+<section class="contact-sec3">
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d317896.3664771702!2d-0.119452!3d51.502843!3m2!1i1024!2i768!4f13.1!2m1!1sLondon%20Eye%2C%20London%2C%20United%20Kingdom!5e0!3m2!1sen!2sus!4v1749722075092!5m2!1sen!2sus"
+        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+</section>
+
+{% endblock %}

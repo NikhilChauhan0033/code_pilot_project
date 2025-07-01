@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+Courses List
+{% endblock %}
+
+{% block body %}
+
+
+<section class="contact-sec1">
+    <div class="contact-relative-div">
+        <h1>Courses</h1>
+        <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Courses</p>
+
+        <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img"></div>
+        <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img"></div>
+        <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img"></div>
+    </div>
+</section>
+
+
+<section class="courses-section" data-aos="fade-up" data-aos-duration="1000">
+
+    <div class="filter-category-text">
+        <p class="active" data-category="all" onclick="filterCourses(this)">All Courses</p>
+        <p data-category="full_stack" onclick="filterCourses(this)">Full Stack Development</p>
+        <p data-category="mobile_app" onclick="filterCourses(this)">Mobile App Development</p>
+        <p data-category="data_science" onclick="filterCourses(this)">Data Science</p>
+        <p data-category="data_analytics" onclick="filterCourses(this)">Data Analytics</p>
+        <p data-category="software_testing" onclick="filterCourses(this)">Software Testing</p>
+        <p data-category="digital_marketing" onclick="filterCourses(this)">Digital Marketing</p>
+        <p data-category="ux_ui" onclick="filterCourses(this)">UX/UI Design</p>
+        <p data-category="cyber_security" onclick="filterCourses(this)">Cyber Security</p>
+    </div>
+
+
+
+    <div class="courses-container-allcourses">
+        {% for course in allcourses %}
+        <div class="courses-maindiv" data-category="{{ course.category }}"
+            style="background-color: #f0f4f5 !important;">
+            <a href="{% url 'course_detail' course.id %}" style="text-decoration: none; color: black;">
+
+                <video width="100%" height="250" controls
+                    style="border-top-left-radius: 3px;border-top-right-radius:3px;">
+                    <source src="{{ course.promo_video.url }}" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <div class="courses-child">
+                    <div class="child-absdiv">
+                        <p><i class="fa-regular fa-clock"></i> {{ course.duration }}</p>
+                    </div>
+
+                    <p class="courses-level">{{ course.level }}</p>
+                    <p class="courses-name">{{ course.course_name }} <br> <span>{{ course.subcategory }}</span></p>
+                    <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+                    <p class="courses-price">₹{{ course.price }}</p>
+                    <div class="child-flex">
+                        <p class="courses-student"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+                            Students
+                        </p>
+                        <p class="courses-badge">{{ course.badge }}</p>
+                    </div>
+                </div>
+                <div class="courses-absdiv">
+                    <button class="add-fav" {% if not request.user.is_authenticated %} data-toggle="modal"
+                        data-target="#exampleModalCenter" data-bs-dismiss="offcanvas" onclick="showLoginMessage()" 
+                        {% else %} data-id="{{ course.id }}" {% endif %}>
+                        {% if course in favorite_courses %}
+                        <i class="fa-solid fa-heart text-danger"></i>
+                        {% else %}
+                        <i class="fa-regular fa-heart"></i>
+                        {% endif %}
+                    </button>
+
+                    <p class="abs-level" style="color: black !important;">{{ course.level }}</p>
+                    <h6>{{ course.course_name }} <br> <span
+                            style="text-transform: uppercase;">{{course.subcategory}}</span>
+                    </h6>
+                    <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+                    <p>₹{{ course.price }}</p>
+                    <p class="courses-desc">{{ course.short_description }}</p>
+                    <div class="child-flex">
+                        <p class="courses-student cs"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+                            Students
+                        </p>
+                        <p class="courses-badge">{{ course.badge }}</p>
+                    </div>
+                    <a href="{% url 'course_detail' course.id %}">
+                        <button class="enroll-btn">Enroll Now <i class="fa-solid fa-arrow-right-long ml-1"
+                                id="faArrow"></i></button>
+                    </a>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>No courses available.</p>
+        {% endfor %}
+    </div>
+
+</section>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  const categoryFromURL = params.get("category");
+
+  // Highlight category and filter courses on page load
+  if (categoryFromURL) {
+    const categoryElement = document.querySelector(
+      `.filter-category-text p[data-category="${categoryFromURL}"]`
+    );
+    if (categoryElement) {
+      filterCourses(categoryElement, true); // true = don't push URL again
+    }
+  } else {
+    // Default to all
+    const allCategory = document.querySelector('.filter-category-text p[data-category="all"]');
+    if (allCategory) {
+      filterCourses(allCategory, true);
+    }
+  }
+});
+
+function redirectToCourses(category) {
+  window.location.href = `/courses/?category=${category}`;
+}
+
+function filterCourses(element, skipPush = false) {
+  // Set active class
+  document
+    .querySelectorAll(".filter-category-text p, .div-grid")
+    .forEach((p) => p.classList.remove("active"));
+  element.classList.add("active");
+
+  const selectedCategory = element.getAttribute("data-category");
+
+  // Update the URL if needed
+  if (!skipPush) {
+    const newURL =
+      selectedCategory === "all"
+        ? window.location.pathname
+        : `${window.location.pathname}?category=${selectedCategory}`;
+    window.history.pushState({}, "", newURL);
+  }
+
+  // Show/hide courses
+  document.querySelectorAll(".courses-maindiv").forEach((card) => {
+    const courseCategory = card.getAttribute("data-category");
+    if (selectedCategory === "all" || courseCategory === selectedCategory) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+</script>
+
+
+{% endblock %}

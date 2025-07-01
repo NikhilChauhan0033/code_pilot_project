@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+  <div class="contact-relative-div">
+    <h1>Payment Success</h1>
+    <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Payment Success</p>
+
+    <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img" /></div>
+    <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img" /></div>
+    <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img" /></div>
+  </div>
+</section>
+
+<section class="success-section">
+  <div class="payment-div">
+
+    <h1 style="color: green;"><i class="fa-solid fa-circle-check"></i> Payment Successful!</h1>
+    <p>Thank you for your purchase, <span>{{ request.user.username }}</span>.</p>
+    <p>Your course has been added to your account.</p>
+    <p>The course details have also been sent to your registered <span>Email</span>.</p>
+    <p>Payment Method : <span>UPI / Card</span></p>
+    <p>Total Debited : <span>₹9999</span></p>
+    <a href="{% url 'index' %}" class="atag"><button class="parentbtn mt-3"><i
+          class="fa-solid fa-house"></i></button></a>
+    <a href="{% url 'checkout_history' %}" class="atag"><button class="parentbtn mt-3"><i
+          class="fa-solid fa-clock-rotate-left"></i></button></a>
+  </div>
+
+</section>
+{% endblock %}

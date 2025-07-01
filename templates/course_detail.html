@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Course Details {{ course.course_name }}
+{% endblock %}
+
+{% block body %}
+
+<section class="course-detail-sec1">
+
+  <div class="course-detail-container">
+    <p><a href="{% url 'index'%}">Home</a><i class="fa-solid fa-chevron-right"></i>Course<i
+        class="fa-solid fa-chevron-right"></i><span
+        style="font-weight: 500; border: none; margin: 0px;">{{course.course_name}}</span></p>
+
+    <h1>{{course.course_name}}</h1>
+
+    <div>
+      <p><i class="fa-solid fa-chalkboard-user"></i>By {{course.instructor.name}}</p>
+      <span></span>
+      <p><i class="fa-solid fa-globe"></i> {{course.get_category_display}}</p>
+      <span></span>
+      <p><i class="fa-solid fa-star gold"></i> {{ course.rating }}</p>
+    </div>
+    <div class="details-absu1 follow-cursor"><img src="{% static 'image/hbg1.png' %}" alt="img"></div>
+    <div class="details-absu2 follow-cursor"><img src="{% static 'image/hbg4.png' %}" alt="img"></div>
+  </div>
+</section>
+
+
+<section class="course-detail-sec2">
+
+  <div class="parent-detail-div">
+    <div class="course-detail-div1">
+      <h2>Course Description</h2>
+
+      <p>{{ course.long_description }}</p>
+      <p>{{ course.short_description }}</p>
+
+      <h5>What You'll Learn?</h5>
+
+      <p><i class="fa-solid fa-check"></i> {{ course.learning_outcomes }} </p>
+      <p><i class="fa-solid fa-check"></i> {{ course.technologies_covered }} </p>
+      <p><i class="fa-solid fa-check"></i> Learn how to implement Authentication & Authorization</p>
+      <p><i class="fa-solid fa-check"></i> Work on various case studies and projects using
+        {{course.technologies_covered}}</p>
+
+      <div class="course-detail-instructor">
+
+        <div class="course-detail-instructor-info1">
+          {% if course.instructor.profile_image %}
+          <img src="{{ course.instructor.profile_image.url }}" alt="{{ course.instructor.name }}">
+          {% endif %}
+        </div>
+
+        <div class="course-detail-instructor-info2">
+          <h4>{{ course.instructor.name }}</h4>
+          <p>{{ course.instructor.profession }}</p>
+          <p>{{ course.instructor.about }}</p>
+
+          <div class="contact-icons-div">
+            <div><i class="fa-brands fa-facebook-f"></i></div>
+            <div><i class="fa-brands fa-twitter"></i></div>
+            <div><i class="fa-brands fa-linkedin-in"></i></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-detail-rating-div">
+        <div class="course-detail-rating-parent">
+          <div class="course-detail-rating">
+            <h3>{{course.rating}}/5</h3>
+            <i class="fa-solid fa-star gold"></i>
+            <i class="fa-solid fa-star gold"></i>
+            <i class="fa-solid fa-star gold"></i>
+            <i class="fa-solid fa-star gold"></i>
+            <i class="fa-solid fa-star gold"></i>
+          </div>
+        </div>
+        <div class="course-detail-rating-count">
+          <div><span class="num-star">5 <i class="fa-solid fa-star gold"></i></span>
+            <div style="background-color: gold !important;" class="star-range range-gold"></div> <span
+              class="num">4</span>
+          </div>
+          <div><span class="num-star">4 <i class="fa-solid fa-star gold"></i></span>
+            <div class="star-range"></div> <span class="num">2</span>
+          </div>
+          <div><span class="num-star">3 <i class="fa-solid fa-star gold"></i></span>
+            <div class="star-range"></div> <span class="num">3</span>
+          </div>
+          <div><span class="num-star">2 <i class="fa-solid fa-star gold"></i></span>
+            <div class="star-range"></div> <span class="num">1</span>
+          </div>
+          <div><span class="num-star">1 <i class="fa-solid fa-star gold"></i></span>
+            <div class="star-range"></div> <span class="num">0</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="course-detail-div2">
+      <button class="add-fav favadd" {% if not request.user.is_authenticated %} data-toggle="modal"
+        data-target="#exampleModalCenter" data-bs-dismiss="offcanvas" onclick="showLoginMessage()" {% else %}
+        data-id="{{ course.id }}" {% endif %}>
+        {% if course in favorite_courses %}
+        <i class="fa-solid fa-heart text-danger"></i>
+        {% else %}
+        <i class="fa-regular fa-heart"></i>
+        {% endif %}
+      </button>
+
+      {% if course.promo_video %}
+      <video controls>
+        <source src="{{ course.promo_video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      {% endif %}
+
+
+      <div class="p-2">
+        <h4>Course Includes:</h4>
+
+        <div class="detail-course"><span>Price:</span> <span class="pink-text-color">₹{{course.price}}</span></div>
+        <div class="detail-course"><span>Instructor:</span> <span>{{course.instructor.name}}</span></div>
+        <div class="detail-course"><span>Duration:</span> <span>{{course.duration}}</span></div>
+        <div class="detail-course"><span>Lessons:</span> <span>{{course.lessons_count}}</span></div>
+        <div class="detail-course"><span>Students:</span> <span>{{course.students_enrolled}}</span></div>
+        <div class="detail-course"><span>Language:</span> <span>{{course.language}}</span></div>
+        <div class="detail-course"><span>Certifications:</span> <span>{{course.certification}}</span></div>
+
+
+
+        {% if user.is_authenticated %}
+        <button class="add-to-cart parentbtn buybtn" data-id="{{ course.id }}">Add to Cart</button>
+
+        <a href="{% url 'checkout' %}?course_id={{ course.id }}">
+          <button class="parentbtn buybtn">Buy Now</button>
+        </a>
+
+        {% else %}
+        <button type="button" class="parentbtn buybtn" data-toggle="modal" data-target="#exampleModalCenter">
+          Login / Register To Buy
+        </button>
+        {% endif %}
+
+        <h4 class="share-h4">Share On:</h4>
+        <div class="contact-icons-div">
+          <div><i class="fa-brands fa-facebook-f"></i></div>
+          <div><i class="fa-brands fa-twitter"></i></div>
+          <div><i class="fa-brands fa-linkedin-in"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="course-detail-sec3" data-aos="fade-up" data-aos-duration="1000">
+
+  <h2>Courses You May Like</h2>
+
+  <div class="courses-container-allcourses">
+    {% for course in courses|slice:":3" %}
+    <div class="courses-maindiv" style="background-color: #f0f4f5 !important;">
+      <a href="{% url 'course_detail' course.id %}" style="text-decoration: none; color: black;">
+
+        <video width="100%" height="250px" controls style="border-top-left-radius: 3px;border-top-right-radius:3px; ">
+          <source src="{{ course.promo_video.url }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="courses-child">
+          <div class="child-absdiv">
+            <p><i class="fa-regular fa-clock"></i> {{ course.duration }}</p>
+          </div>
+
+          <p class="courses-level">{{ course.level }}</p>
+          <p class="courses-name">{{ course.course_name }} <br> <span>{{ course.subcategory }}</span></p>
+          <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+          <p class="courses-price">₹{{ course.price }}</p>
+          <div class="child-flex">
+            <p class="courses-student"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+              Students
+            </p>
+            <p class="courses-badge">{{ course.badge }}</p>
+          </div>
+        </div>
+        <div class="courses-absdiv">
+          <button class="add-fav" {% if not request.user.is_authenticated %} data-toggle="modal"
+            data-target="#exampleModalCenter" data-bs-dismiss="offcanvas" onclick="showLoginMessage()" {% else %}
+            data-id="{{ course.id }}" {% endif %}>
+            {% if course in favorite_courses %}
+            <i class="fa-solid fa-heart text-danger"></i>
+            {% else %}
+            <i class="fa-regular fa-heart"></i>
+            {% endif %}
+          </button>
+
+          <p class="abs-level" style="color: black !important;">{{ course.level }}</p>
+          <h6>{{ course.course_name }} <br> <span style="text-transform: uppercase;">{{course.subcategory}}</span>
+          </h6>
+          <p><i class="fa-solid fa-star" style="color: gold;"></i> {{ course.rating }}</p>
+          <p>₹{{ course.price }}</p>
+          <p class="courses-desc">{{ course.short_description }}</p>
+          <div class="child-flex">
+            <p class="courses-student cs"><i class="fa-regular fa-user"></i>{{ course.students_enrolled }}
+              Students
+            </p>
+            <p class="courses-badge">{{ course.badge }}</p>
+          </div>
+          <a href="{% url 'course_detail' course.id %}">
+            <button class="enroll-btn">Enroll Now <i class="fa-solid fa-arrow-right-long ml-1"
+                id="faArrow"></i></button>
+          </a>
+          <!-- messgae  of fav
+            <div id="fav-toast"> 
+                Added to favorites!
+            </div> -->
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <p>No courses available.</p>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'courses' %}" class="atag"> <button class="parentbtn allbtn">Browse more courses <i
+        class="fa-solid fa-arrow-right-long ml-1" id="faArrow"></i></button></a>
+
+</section>
+
+
+<!--<h1>{{ course.course_name }}</h1>
+<p><strong>Instructor:</strong> {{ course.instructor.name }}</p>
+<p><strong>Category:</strong> {{ course.get_category_display }}</p>
+<p><strong>Subcategory:</strong> {{ course.subcategory }}</p>
+<p><strong>Price:</strong> ₹{{ course.price }}</p>
+<p><strong>Old Price:</strong> <del>₹{{ course.old_price }}</del></p>
+<p><strong>Discount:</strong> {{ course.discount_percent }}%</p>
+<p><strong>Duration:</strong> {{ course.duration }}</p>
+<p><strong>Students Enrolled:</strong> {{ course.students_enrolled }}</p>
+<p><strong>Language:</strong> {{ course.language }}</p>
+<p><strong>Certification:</strong> {{ course.certification }}</p>
+<p><strong>Rating:</strong> {{ course.rating }}</p>
+<p><strong>Technologies Covered:</strong> {{ course.technologies_covered }}</p>
+<p><strong>Learning Outcomes:</strong> {{ course.learning_outcomes }}</p>
+<p><strong>Description:</strong> {{ course.long_description }}</p>
+<p><strong>Description:</strong> {{ course.short_description }}</p>
+<p><strong>Badge:</strong> {{ course.badge }}</p>
+<p><strong>Level:</strong> {{ course.level }}</p>
+
+{% if course.promo_video %}
+<video width="400" height="320" controls>
+  <source src="{{ course.promo_video.url }}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+{% endif %}
+
+
+{% if user.is_authenticated %}
+<button class="add-to-cart" data-id="{{ course.id }}" style="background-color: #81c408;">Add to Cart</button>
+
+<div id="cart-message" style="margin-top: 10px; color: green;"></div>
+
+
+<a href="{% url 'checkout' %}?course_id={{ course.id }}">
+  <button>Checkout</button>
+</a>
+{% else %}
+<a href="{% url 'login' %}?next={{ request.path }}">
+  <button style="background-color: #81c408;">Login to Add to Cart</button>
+</a>
+{% endif %}
+
+<a href="{% url 'view_cart' %}">View Cart (<span id="cart-count">{{ request.user.cart_set.count }}</span>)</a>
+
+<a href="{% url 'index' %}"><button type="button" style="background-color: aqua;">Back to Home</button></a>-->
+
+{% endblock %}

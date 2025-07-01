@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Failed{% endblock %}
+
+{% block body %}
+
+<section class="contact-sec1">
+  <div class="contact-relative-div">
+    <h1>Payment Failed</h1>
+    <p><a href="{% url 'index' %}">Home</a> <i class="fa-solid fa-chevron-right"></i> Payment Failed</p>
+
+    <div class="contact-absu1 follow-cursor"><img src="../static/image/hbg1.png" alt="img" /></div>
+    <div class="contact-absu2 follow-cursor"><img src="../static/image/hbg4.png" alt="img" /></div>
+    <div class="contact-absu3 follow-cursor"><img src="../static/image/hbg5.png" alt="img" /></div>
+  </div>
+</section>
+
+<section class="failed-section">
+  <div class="payment-div">
+    <h1 style="color: red;"><i class="fa-solid fa-circle-exclamation"></i> Payment Failed</h1>
+    <p>Sorry, your transaction could not be completed.</p>
+    <p>Please try again or use a different payment method.</p>
+    <a href="{% url 'checkout' %}" class="atag"><button class="parentbtn mt-3">Try Again</button></a>
+    <a href="{% url 'index' %}" class="atag"><button class="parentbtn mt-3"><i class="fa-solid fa-house"></i></button></a>
+  </div>
+</section>
+{% endblock %}
