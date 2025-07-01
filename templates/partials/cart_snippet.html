@@ -22,11 +22,11 @@
 {% else %}
 <div class="cart-else-div">
     <p>Your cart is empty.</p>
-<p>Total: ₹{{ cart_total|floatformat:2 }}</p>
-<a href="{% url 'index' %}"><button class="parentbtn">Go To Courses</button></a>
+    <p>Total: ₹{{ cart_total|floatformat:2 }}</p>
+    <a href="{% url 'index' %}"><button class="parentbtn">Go To Courses</button></a>
 </div>
 {% endif %}
 {% endwith %}
 {% else %}
-<p>Please login to view your cart.</p>
+<p style="text-align: center; color: #1ab69d; margin: 0px; ">Please login to view your cart.</p>
 {% endif %}
